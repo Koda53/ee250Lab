@@ -24,11 +24,17 @@ def load_mail() -> List[Dict[str, str]]:
 
 def save_mail(mail: List[Dict[str, str]]) -> None:
     """TODO: fill out this docstring (using the load_mail docstring as a guide)
+    Saves mail to json file
+    Returns: nothing
+
     """
     thisdir.joinpath('mail_db.json').write_text(json.dumps(mail, indent=4))
 
 def add_mail(mail_entry: Dict[str, str]) -> str:
     """TODO: fill out this docstring (using the load_mail docstring as a guide)
+    adds new mail entry to the json file
+
+    returns: new mail entry id in the form of a str
     """
     mail = load_mail()
     mail.append(mail_entry)
@@ -38,7 +44,11 @@ def add_mail(mail_entry: Dict[str, str]) -> str:
 
 def delete_mail(mail_id: str) -> bool:
     """TODO: fill out this docstring (using the load_mail docstring as a guide)
-    """
+   
+    This deletes a mail entry from the json file
+
+    returns: A boolean, true if deleted, false otherwise
+     """
     mail = load_mail()
     for i, entry in enumerate(mail):
         if entry['id'] == mail_id:
@@ -50,6 +60,10 @@ def delete_mail(mail_id: str) -> bool:
 
 def get_mail(mail_id: str) -> Optional[Dict[str, str]]:
     """TODO: fill out this docstring (using the load_mail docstring as a guide)
+
+    gets a mail entry from the json file
+
+    returns: returns a dictionary of the mail entries if it exists, if not then returns nothing
     """
     mail = load_mail()
     for entry in mail:
@@ -60,6 +74,10 @@ def get_mail(mail_id: str) -> Optional[Dict[str, str]]:
 
 def get_inbox(recipient: str) -> List[Dict[str, str]]:
     """TODO: fill out this docstring (using the load_mail docstring as a guide)
+
+    Gets every mail entry for a recipient from the json file
+
+    returns: list of dictionaries that is supposed to be the mail entries
     """
     mail = load_mail()
     inbox = []
@@ -71,6 +89,10 @@ def get_inbox(recipient: str) -> List[Dict[str, str]]:
 
 def get_sent(sender: str) -> List[Dict[str, str]]:
     """TODO: fill out this docstring (using the load_mail docstring as a guide)
+
+    Gets every mail entry for a sender from the json file
+
+    return: this returns a list of dictionaires that make up the mail entries
     """
     mail = load_mail()
     sent = []
@@ -142,6 +164,18 @@ def get_inbox_route(recipient: str):
 # TODO: implement a rout e to get all mail entries for a sender
 # HINT: start with soemthing like this:
 #   @app.route('/mail/sent/<sender>', ...)
+@app.route('/mail/sent/<senders>', methods = ['GET'])
+def get_sent_route(sender: str):
+    """""
+    This gets all mail entires for a sender
+
+    Args: sender of the mail
+
+    Returns: this returns a list of dictionaires representing the mail entries
+    """
+    res = jsonify(get_sent(sender))
+    res.status_code = 200
+    return res
 
 
 if __name__ == '__main__':
